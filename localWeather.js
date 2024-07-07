@@ -75,7 +75,7 @@ async function displayWeather() {
 
 displayWeather();
 
-module.exports = { fetchWeatherAPI, displayWeather };
+// module.exports = { fetchWeatherAPI, displayWeather };
 
 // Moved code to here for now. This was to try and place my code in an existing div
 //   Get existing element
