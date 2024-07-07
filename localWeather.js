@@ -1,7 +1,9 @@
 /* 
 Elements to create
  - weather container (div)
+ - container for temp and icon (div)
  - temp (p)
+ - description (p)
  - icon (p)
 
 Functions
@@ -19,6 +21,7 @@ async function fetchWeatherAPI() {
   console.log(weatherData);
   // Created elements to add to the document
   const weatherContainer = document.createElement("div");
+  const weatherTempIconContainer = document.createElement("div");
   const weatherTemperature = document.createElement("p");
   const weatherDescription = document.createElement("p");
   const weatherIcon = document.createElement("img");
@@ -30,13 +33,29 @@ async function fetchWeatherAPI() {
 
   weatherDescription.textContent = `Current weather: ${weatherData.list[0].weather[0].main}`;
 
-  //   Weather Icon, can't display image at current commit
-  //   weatherIcon.src = `"${weatherData.list[0].weather[0].icon}`;
-  //   weatherIcon.alt = "weather icon";
+  //   Weather Icon, the mock data uses the icon code form open weather API, in this code I have parsed the icon code from the mock fetch and stored in a variable. I can then reuse this in a URL string to display the specific weather icon
+  const iconCodeFromAPI = weatherData.list[0].weather[0].icon;
+  weatherIcon.src = `http://openweathermap.org/img/wn/${iconCodeFromAPI}@2x.png`;
+  weatherIcon.alt = "weather icon";
 
-  weatherContainer.appendChild(weatherTemperature);
+  //   Styles for all elements and weather container
+  weatherContainer.style.borderTop = "2px solid black";
+  weatherContainer.style.width = "auto";
+  weatherContainer.style.display = "flex";
+  weatherContainer.style.flexDirection = "column";
+  weatherContainer.style.alignItems = "center";
+  weatherContainer.style.margin = "30px";
+
+  weatherTempIconContainer.style.width = "100%";
+  weatherTempIconContainer.style.display = "flex";
+  weatherTempIconContainer.style.alignItems = "center";
+  weatherTempIconContainer.style.justifyContent = "space-evenly";
+
+  // Append(add) all elements to weatherContainer and in turn append the container to the body
+  weatherContainer.appendChild(weatherTempIconContainer);
+  weatherTempIconContainer.appendChild(weatherTemperature);
+  weatherTempIconContainer.appendChild(weatherIcon);
   weatherContainer.appendChild(weatherDescription);
-  //   weatherContainer.appendChild(weatherIcon);
   document.body.appendChild(weatherContainer);
 }
 
