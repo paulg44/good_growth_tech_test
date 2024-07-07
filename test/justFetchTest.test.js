@@ -1,6 +1,25 @@
 const justFetch = require("./justFetch");
-const nock = require("nock");
+// const nock = require("nock");
 
+// Jest mock function for mocking a fetch requests response
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    json: () =>
+      Promise.resolve({
+        list: [
+          {
+            main: { temp: 25 },
+            weather: [{ main: "Cloudy", icon: "8rd" }],
+          },
+        ],
+      }),
+  })
+);
+
+test("mocks the fetch call and returns correct weather data", async () => {
+  const weatherData = await justFetch();
+  expect(weatherData.list[0].weather[0].main).toEqual("Cloudy");
+});
 // describe("expected weather data", () => {
 //   beforeAll(() => {
 //     nock.disableNetConnect();
@@ -38,22 +57,3 @@ const nock = require("nock");
 //     expect(weatherData.list[0].weather[0].main).toBe("Cloudy");
 //   });
 // });
-
-global.fetch = jest.fn(() =>
-  Promise.resolve({
-    json: () =>
-      Promise.resolve({
-        list: [
-          {
-            main: { temp: 25 },
-            weather: [{ main: "Cloudy", icon: "8rd" }],
-          },
-        ],
-      }),
-  })
-);
-
-test("mocks the fetch call and returns correct weather data", async () => {
-  const weatherData = await justFetch();
-  expect(weatherData.list[0].weather[0].main).toEqual("Cloudy");
-});

@@ -8,6 +8,7 @@ Elements to create
 
 Functions
  - fetch weather
+ - display weather
 */
 
 // Fetch the weather data from the API, in this case fetch a mock end point.
