@@ -12,13 +12,29 @@ Functions
 
 // Fetch the weather data from the API, in this case fetch a mock end point.
 async function fetchWeatherAPI() {
-  const weatherResponse = await fetch(
-    "https://europe-west1-amigo-actions.cloudfunctions.net/recruitment-mock-weather-endpoint/forecast?appid=a2ef86c41a&lat=27.987850&lon=86.925026"
-  );
+  try {
+    const weatherResponse = await fetch(
+      "https://europe-west1-amigo-actions.cloudfunctions.net/recruitment-mock-weather-endpoint/forecast?appid=a2ef86c41a&lat=27.987850&lon=86.925026"
+    );
 
-  const weatherData = await weatherResponse.json();
-  //   return weatherData
+    const weatherData = await weatherResponse.json();
+    // Instead of returning all the data to the display data function I just return the data that I need. In this case temperature, description and the icon
+    const parsedWeatherData = {
+      temperature: Math.round(weatherData.list[0].main.temp),
+      description: weatherData.list[0].weather[0].main,
+      icon: `https://openweathermap.org/img/wn/${weatherData.list[0].weather[0].icon}@2x.png`,
+    };
+
+    return parsedWeatherData;
+  } catch (error) {
+    console.error("Error fetching weather:", error);
+  }
+}
+
+async function displayWeather() {
+  const weatherData = await fetchWeatherAPI();
   console.log(weatherData);
+
   // Created elements to add to the document
   const weatherContainer = document.createElement("div");
   const weatherTempIconContainer = document.createElement("div");
@@ -27,15 +43,12 @@ async function fetchWeatherAPI() {
   const weatherIcon = document.createElement("img");
 
   //   The temperature needs to be rounded down using Math.round()
-  weatherTemperature.textContent = `Current Temperature: ${Math.round(
-    weatherData.list[0].main.temp
-  )} C`;
+  weatherTemperature.textContent = `Current Temperature: ${weatherData.temperature} C`;
 
-  weatherDescription.textContent = `Current weather: ${weatherData.list[0].weather[0].main}`;
+  weatherDescription.textContent = `Current weather: ${weatherData.description}`;
 
   //   Weather Icon, the mock data uses the icon code form open weather API, in this code I have parsed the icon code from the mock fetch and stored in a variable. I can then reuse this in a URL string to display the specific weather icon
-  const iconCodeFromAPI = weatherData.list[0].weather[0].icon;
-  weatherIcon.src = `http://openweathermap.org/img/wn/${iconCodeFromAPI}@2x.png`;
+  weatherIcon.src = weatherData.icon;
   weatherIcon.alt = "weather icon";
 
   //   Styles for all elements and weather container
@@ -45,6 +58,7 @@ async function fetchWeatherAPI() {
   weatherContainer.style.flexDirection = "column";
   weatherContainer.style.alignItems = "center";
   weatherContainer.style.margin = "30px";
+  weatherContainer.style.zIndex = "10";
 
   weatherTempIconContainer.style.width = "100%";
   weatherTempIconContainer.style.display = "flex";
@@ -59,4 +73,13 @@ async function fetchWeatherAPI() {
   document.body.appendChild(weatherContainer);
 }
 
-fetchWeatherAPI();
+displayWeather();
+
+module.exports = { fetchWeatherAPI, displayWeather };
+
+// Moved code to here for now. This was to try and place my code in an existing div
+//   Get existing element
+// const headerSectionOnSite = document.querySelector(
+//   ".Sectionstyle__Inner-sc-1rnt8u1-1 iBzTQm"
+// );
+//   headerSectionOnSite.appendChild(weatherContainer);
