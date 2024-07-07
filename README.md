@@ -4,7 +4,7 @@
 
 The brief was to add a code snippet(JavaScript script) to the national trust website, to be able to display the weather of a specific location.
 
-<!-- Add here non technical overview. Video?-->
+Please click this video link for a short introduction and overview of the project https://youtu.be/zfxN46t3Xps
 
 Tech Stack
 
