@@ -13,20 +13,22 @@ Functions
 
 // Fetch the weather data from the API, in this case fetch a mock end point.
 async function fetchWeatherAPI() {
+  const key = "7f5fe9fdfbbd457c8bd180912242207";
+
   try {
     const weatherResponse = await fetch(
-      "https://europe-west1-amigo-actions.cloudfunctions.net/recruitment-mock-weather-endpoint/forecast?appid=a2ef86c41a&lat=27.987850&lon=86.925026"
+      `http://api.weatherapi.com/v1/current.json?key=${key}&q=lapworth`
     );
 
     const weatherData = await weatherResponse.json();
     console.log(weatherData);
     // Instead of returning all the data to the display data function I just return the data that I need. In this case temperature, description and the icon
     const parsedWeatherData = {
-      temperature: Math.round(weatherData.list[0].main.temp),
-      description: weatherData.list[0].weather[0].main,
-      icon: `https://openweathermap.org/img/wn/${weatherData.list[0].weather[0].icon}@2x.png`,
-      lat: weatherData.city.coord.lat,
-      lon: weatherData.city.coord.lon,
+      temperature: weatherData.current.temp_c,
+      description: weatherData.current.condition.text,
+      icon: weatherData.current.condition.icon,
+      lat: weatherData.location.lat,
+      lon: weatherData.location.lon,
     };
 
     return parsedWeatherData;
