@@ -24,6 +24,8 @@ app.get("/weather", async (req, res) => {
   }
 });
 
+// Feature Flag
+
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });

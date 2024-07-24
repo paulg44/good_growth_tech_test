@@ -1,17 +1,10 @@
-/* 
-Elements to create
- - weather container (div)
- - container for temp and icon (div)
- - temp (p)
- - description (p)
- - icon (p)
+import { setAlternateFeatureFlag, hasFeatureFlag } from "./featureFlag.js";
 
-Functions
- - fetch weather
- - display weather
-*/
+// Set feature flag
+setAlternateFeatureFlag("extraFeature");
 
-// Fetch the weather data from the API, in this case fetch a mock end point.
+const hasExtraFeature = hasFeatureFlag("extraFeature");
+
 async function fetchWeatherAPI() {
   try {
     const weatherResponse = await fetch("http://localhost:5009/weather");
@@ -75,20 +68,16 @@ async function displayWeather() {
   // Append(add) all elements to weatherContainer and in turn append the container to the body
   weatherContainer.appendChild(weatherTempIconContainer);
   weatherTempIconContainer.appendChild(weatherTemperature);
-  weatherTempIconContainer.appendChild(weatherLat);
-  weatherTempIconContainer.appendChild(weatherLon);
   weatherTempIconContainer.appendChild(weatherIcon);
+  weatherTempIconContainer.appendChild(weatherLon);
   weatherContainer.appendChild(weatherDescription);
+
+  // Feature Flag
+  if (hasExtraFeature === "true") {
+    weatherTempIconContainer.appendChild(weatherLat);
+  }
+
   document.body.appendChild(weatherContainer);
 }
 
 displayWeather();
-
-// module.exports = { fetchWeatherAPI, displayWeather };
-
-// Moved code to here for now. This was to try and place my code in an existing div
-//   Get existing element
-// const headerSectionOnSite = document.querySelector(
-//   ".Sectionstyle__Inner-sc-1rnt8u1-1 iBzTQm"
-// );
-//   headerSectionOnSite.appendChild(weatherContainer);
