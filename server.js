@@ -11,7 +11,7 @@ app.use(cors());
 
 app.get("/weather", async (req, res) => {
   const apikey = process.env.API_KEY;
-  const location = "new york";
+  const location = req.query.location;
   try {
     const response = await fetch(
       `http://api.weatherapi.com/v1/current.json?key=${apikey}&q=${location}`

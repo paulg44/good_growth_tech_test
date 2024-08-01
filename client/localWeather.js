@@ -5,9 +5,11 @@ setAlternateFeatureFlag("extraFeature");
 
 const hasExtraFeature = hasFeatureFlag("extraFeature");
 
-async function fetchWeatherAPI() {
+async function fetchWeatherAPI(location) {
   try {
-    const weatherResponse = await fetch("http://localhost:5009/weather");
+    const weatherResponse = await fetch(
+      `http://localhost:5009/weather?location=${location}`
+    );
 
     const weatherData = await weatherResponse.json();
     console.log(weatherData);
@@ -27,7 +29,15 @@ async function fetchWeatherAPI() {
 }
 
 async function displayWeather() {
-  const weatherData = await fetchWeatherAPI();
+  const postcodeDiv = document.querySelector(
+    "div[data-testid='place-postal-address']"
+  );
+
+  const postcode = postcodeDiv.innerHTML;
+
+  console.log(postcode);
+
+  const weatherData = await fetchWeatherAPI(postcode);
   console.log(weatherData);
 
   // Created elements to add to the document
